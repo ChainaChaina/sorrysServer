@@ -1,11 +1,12 @@
 const express = require('express');
+require('dotenv').config();
 const mongoose = require('mongoose');
 
 const app = express();
 const PORT = 3000;
 
 // Replace <db_password> with your actual database password
-const mongoURI = 'mongodb+srv://lucasbm777:<secret>@cluster0.ot46u.mongodb.net/SorryDataBase?retryWrites=true&w=majority&appName=Cluster0';
+const mongoURI = process.env.MONGO_URI;
 // Middleware to parse JSON
 app.use(express.json());
 
