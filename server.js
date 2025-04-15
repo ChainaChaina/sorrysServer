@@ -1,11 +1,12 @@
 const express = require('express');
 require('dotenv').config();
 const mongoose = require('mongoose');
+const { createServer } = require('http');
+const { parse } = require('url');
 
 const app = express();
 const PORT = 3000;
 
-// Replace <db_password> with your actual database password
 const mongoURI = process.env.MONGO_URI;
 // Middleware to parse JSON
 app.use(express.json());
@@ -30,8 +31,15 @@ app.get("/", (req, res) => {
   });
 
 // Start the server
-app.listen(PORT, () => {
+const server = createServer((req, res) => {
+  const parsedUrl = parse(req.url, true);
+  app(req, res, parsedUrl); // Passa o controle para o Express
+});
+
+server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 require("./app/routes/routes")(app);
+
+module.exports = server;
