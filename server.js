@@ -1,37 +1,49 @@
-const express = require('express');
+const express = require("express");
 require('dotenv').config();
-const mongoose = require('mongoose');
+const cors = require("cors");
 
 const app = express();
-const PORT = 3000;
 
+const corsOptions = {
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  optionsSuccessStatus: 204
+};
 
-const mongoURI = process.env.MONGO_URI;
-// Middleware to parse JSON
+app.use(cors(corsOptions));
+
+// parse requests of content-type - application/json
 app.use(express.json());
 
-// Connect to MongoDB
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
-        console.log('Connected to MongoDB');
-    })
-    .catch((err) => {
-        console.error('Error connecting to MongoDB:', err.message);
-    });
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
 
-// Basic route
-app.get('/', (req, res) => {
-    res.send('Node server is running!');
-});
+const db = require("./app/models");
+
+const uri = process.env.MONGO_URI
+db.mongoose
+  .connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .then(() => {
+    console.log("Connected to the database!");
+  })
+  .catch(err => {
+    console.log("Cannot connect to the database!", err);
+    process.exit();
+  });
 
 // simple route
 app.get("/", (req, res) => {
-    res.json({ message: "Welcome to this application, we on!" });
-  });
-
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  res.json({ message: "Welcome to this application, Lucas." });
 });
 
+
 require("./app/routes/routes")(app);
+
+// set port, listen for requests
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
+});
