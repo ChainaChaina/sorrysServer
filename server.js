@@ -5,7 +5,7 @@ const app = express();
 const PORT = 3000;
 
 // Replace <db_password> with your actual database password
-const mongoURI = 'mongodb+srv://lucasbm777:dXkBOlU325i7UowO@cluster0.ot46u.mongodb.net/SorryDataBase?retryWrites=true&w=majority&appName=Cluster0';
+const mongoURI = 'mongodb+srv://lucasbm777:<secret>@cluster0.ot46u.mongodb.net/SorryDataBase?retryWrites=true&w=majority&appName=Cluster0';
 // Middleware to parse JSON
 app.use(express.json());
 
