@@ -1,11 +1,10 @@
 const express = require('express');
 require('dotenv').config();
 const mongoose = require('mongoose');
-const { createServer } = require('http');
-const { parse } = require('url');
 
 const app = express();
 const PORT = 3000;
+
 
 const mongoURI = process.env.MONGO_URI;
 // Middleware to parse JSON
@@ -31,15 +30,8 @@ app.get("/", (req, res) => {
   });
 
 // Start the server
-const server = createServer((req, res) => {
-  const parsedUrl = parse(req.url, true);
-  app(req, res, parsedUrl); // Passa o controle para o Express
-});
-
-server.listen(PORT, () => {
+app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 require("./app/routes/routes")(app);
-
-module.exports = server;
